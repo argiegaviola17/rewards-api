@@ -16,7 +16,7 @@ export class RewardService {
     
     constructor(@InjectModel(Reward.name) private rewardModel: Model<RewardDocument>) {}
 
-    getNumbers(body: ReqQuery){
+    parseAndGet(body: ReqQuery){
         let pageNumber = 0;
         try{
             pageNumber = new BigNumber( body.pageNumber).toNumber();
@@ -30,7 +30,7 @@ export class RewardService {
     }
   
     async findAll(body: ReqQuery) {
-        let { pageNumber, nPerPage } = this.getNumbers(body)
+        let { pageNumber, nPerPage } = this.parseAndGet(body)
         pageNumber = pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0
         nPerPage = nPerPage + 1;
         console.log(pageNumber);
