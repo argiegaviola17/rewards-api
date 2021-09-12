@@ -2,9 +2,13 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { query } from 'express';
 import { RewardService } from './reward.service';
-
+export interface ReqQuery {
+    pageNumber: number; 
+    count: number;
+}
 @Controller("reward")
 export class RewardController { 
     constructor(
@@ -12,8 +16,9 @@ export class RewardController {
     ) {}
 
     @Get("all")
-    getAllRewards() {
-        return this.rewardService.findAll();
+    getAllRewards(@Query() body: ReqQuery) {
+        console.log("query: ",body);
+        return this.rewardService.findAll(body)
     }
 
     @Get(":id")

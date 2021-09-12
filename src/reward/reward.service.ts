@@ -4,8 +4,10 @@ https://docs.nestjs.com/providers#services
 
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import BigNumber from 'bignumber.js';
 import { ClientSession, Model } from 'mongoose';
 import { Reward, RewardDocument } from 'src/schemas/reward.schema';
+import { ReqQuery } from './reward.controller';
 import { REWARD_DEFAULT_DATA } from './reward.default.data';
 
 @Injectable()
@@ -14,18 +16,44 @@ export class RewardService {
     
     constructor(@InjectModel(Reward.name) private rewardModel: Model<RewardDocument>) {}
 
+    getNumbers(body: ReqQuery){
+        let pageNumber = 0;
+        try{
+            pageNumber = new BigNumber( body.pageNumber).toNumber();
+        }catch(err){}
+
+        let nPerPage = 3;
+        try {
+            nPerPage = new BigNumber(body.count).toNumber();
+        } catch(err){}
+        return { pageNumber, nPerPage };
+    }
   
-    async findAll(): Promise<Reward[]> {
-      return this.rewardModel.find().exec();
+    async findAll(body: ReqQuery) {
+        let { pageNumber, nPerPage } = this.getNumbers(body)
+        pageNumber = pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0
+        nPerPage = nPerPage + 1;
+        console.log(pageNumber);
+        console.log(nPerPage);
+        const items = await this.rewardModel.find().sort( { createdOn: 1 } )
+             .skip( pageNumber )
+             .limit( nPerPage   ).exec()
+        let hasNext = "N";
+        if(items.length > body.count ){
+            hasNext = "Y";
+            items.pop();
+        }
+        return { items,  hasNext };
     }
 
     async initData() {
          
-        const data = await this.findAll();
+        const data = await this.rewardModel.count();
  
-        if(data.length === 0){
+        if(data === 0){
             for(const data of REWARD_DEFAULT_DATA){
                 const createdReward = new this.rewardModel(data);
+                createdReward.createdOn = (new Date()).getTime();
                 await createdReward.save();
             }
         }

@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 export type RewardDocument = Reward & Document;
 
 @Schema({
-    optimisticConcurrency: true,
+    optimisticConcurrency: true
 })
 export class Reward {
  
@@ -20,6 +20,9 @@ export class Reward {
 
     @Prop({ required: true })
     quantity: number;
+
+    @Prop({ required: true })
+    createdOn: number;
   
 }
 
