@@ -20,7 +20,7 @@ export const REWARD_DEFAULT_DATA = [
     {
         name: "PS5",
         description: `The PlayStation 5 (PS5) is a home video game console developed by Sony Interactive Entertainment. ... The PS5, along with Microsoft's Xbox Series X and Series S consoles were released in the same month, is part of the ninth generation of video game consoles.`,
-        imageUrl: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=564&q=80",
+        imageUrl: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80",
         quantity: 100
     },
     {
